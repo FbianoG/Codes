@@ -469,7 +469,7 @@ npm i typescript ts-node @types/node @types/express nodemon dotenv -D
 8. Banco de dados para teste
 
 ```ts
-const res = await mongoose.connect('mongodb+srv://teste:123@cluster0.s1parrs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+const res = await mongoose.connect('mongodb+srv://teste:<teste1>@cluster0.s1parrs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
 ```
 
 ### ⚛️ UseRouter
