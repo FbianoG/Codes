@@ -546,16 +546,21 @@ server.listen(port, () => {
 import WebSocket from 'ws';
 import { Server } from 'http';
 
-const webs = async (server: Server) => {
+interface CustomWebSocket extends WebSocket {
+	login: string;
+}
+
+const initWss = async (server: Server) => {
 	const wss = new WebSocket.Server({ server });
 	const clients = new Map<string, CustomWebSocket>(); // Caso faça sessões individuais de usuários
 
-	wss.on('connection', (ws: WebSocket ) => {
-   	ws.on('message', async (message: WebSocket.RawData) => {}
-   	ws.on('close', (code, reason) => {}
-   	ws.on('error', (error) => {}
-   }
+	wss.on('connection', (ws: WebSocket) => {
+		ws.on('message', async (message: WebSocket.RawData) => {});
+		ws.on('close', (code, reason) => {});
+		ws.on('error', (error) => {});
+	});
 };
+
 ```
 
 4. on('message')
