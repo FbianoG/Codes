@@ -456,8 +456,8 @@ npm i typescript ts-node @types/node @types/express nodemon dotenv -D
 ```json
 {
    "version": 2,
-   "builds": [{"
-      src": "src/index.ts",
+   "builds": [{
+      "src": "src/index.ts",
       "use": "@vercel/node"
    }],
    "routes": [{
@@ -509,6 +509,8 @@ const patientId = params.patientId; // já vem como string
 
 Ver exemplo em: [ProClinic-Front](https://github.com/FbianoG/ProClinic-Front/blob/main/src/components/chat/Chat.tsx)
 Ver exemplo em: [ProClinic-Back](https://github.com/FbianoG/ProClinic-Back/blob/main/src/utils/webSocket.ts)
+
+#### Backend
 
 1. Instalação
 
@@ -650,6 +652,47 @@ clients.forEach((client) => {
 		client.send(OBJECT_JSON);
 	}
 });
+```
+#### Frontend
+
+> Não precisa instalar nada no `frontend`. O navegador ja possui `WebSocket` por padrão
+
+1. Criar um `ref` do `WebSocket`. Assim o `WebSocket` não fica mutável
+
+```tsx
+const socket = useRef<WebSocket | null>(null);
+```
+
+2. Configura de onde virá a conexão. Usar dentro do `useEffect`
+
+> [!NOTE]
+> Use `ws` se estiver rodando localmente e `wss` se estiver em produção
+> 
+```tsx
+useEffet(() => {
+	socket.current = new WebSocket('ws://localhost:3000');
+
+	// Aqui trata sempre que o cliente se conectar
+	skt.onopen = () => { };
+
+	// Aqui trata sempre que o cliente recebe uma informação
+	socket.current.onmessage = (event) => {	};
+
+	// Aqui trata sempre que o cliente recebe um erro
+	socket.current.onerror = (err) => { };
+
+	// Aqui trata sempre que o cliente fechar a conexão
+	socket.current.onclose = () => { };
+},[])
+
+```
+
+3. Enviar mensagem
+
+> Pode usar em qualquer lugar desde que tenha importado o `ref SocketWeb`
+
+```tsx
+socket.current.send(JSON.stringify(OBJECT));
 ```
 
 ## Seguraça
