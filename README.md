@@ -669,11 +669,11 @@ const socket = useRef<WebSocket | null>(null);
 > Use `ws` se estiver rodando localmente e `wss` se estiver em produção
 > 
 ```tsx
-useEffet(() => {
+useEffect(() => {
 	socket.current = new WebSocket('ws://localhost:3000');
 
 	// Aqui trata sempre que o cliente se conectar
-	skt.onopen = () => { };
+	socket.current.onopen = () => { };
 
 	// Aqui trata sempre que o cliente recebe uma informação
 	socket.current.onmessage = (event) => {	};
@@ -683,6 +683,8 @@ useEffet(() => {
 
 	// Aqui trata sempre que o cliente fechar a conexão
 	socket.current.onclose = () => { };
+
+	return () => { socket.current?.close() }
 },[])
 
 ```
