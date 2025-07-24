@@ -504,7 +504,7 @@ const params = useParams();
 const patientId = params.patientId; // já vem como string
 ```
 
-#### 🌐 WebSocket
+### 🌐 WebSocket
 
 Ver exemplo em: [ProClinic-Front](https://github.com/FbianoG/ProClinic-Front/blob/main/src/components/chat/Chat.tsx)
 Ver exemplo em: [ProClinic-Back](https://github.com/FbianoG/ProClinic-Back/blob/main/src/utils/webSocket.ts)
