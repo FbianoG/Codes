@@ -244,8 +244,9 @@ npm i dotenv
 ```
 
 2. Criar arquivo `.env` na `root` do projeto
-    > [!WARNING]
-    > Não esquecer de incluir no `.gitignore`
+
+> [!WARNING]
+> Não esquecer de incluir no `.gitignore`
 
 ```env
 USERNAME_DATABASE="Fabiano123"
