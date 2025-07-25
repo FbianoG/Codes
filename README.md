@@ -6,7 +6,7 @@
 
 #### 🔐 Security
 
-[🔐Bcrypt](#-bcrypt) - [🌍Cors](#-cors) - [🍪Cookies](#-cookies) - [🚫Error](#-erros)
+[🔑Bcrypt](#-bcrypt) - [🌍Cors](#-cors) - [🍪Cookies](#-cookies) - [🚫Error](#-erros)
 
 #### ⚙️ Configurações
 
@@ -809,7 +809,7 @@ res.cookie('token', token, {
 
 > Se o domínio do backend for diferente do frontend, use `sameSite: 'none'`. Se for igual, pode usar `sameSite: 'lax'`
 
-### Erros
+### 🚫 Erros
 1. Crie uma `classe`
 
 ```ts
