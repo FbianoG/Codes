@@ -6,7 +6,7 @@
 
 #### 🔐 Security
 
-[🌍Cors](#-cors) - [🍪Cookies](#-cookies)
+[🔐Bcrypt](#-bcrypt) - [🌍Cors](#-cors) - [🍪Cookies](#-cookies) - [🚫Error](#-erros)
 
 #### ⚙️ Configurações
 
@@ -808,6 +808,53 @@ res.cookie('token', token, {
 ```
 
 > Se o domínio do backend for diferente do frontend, use `sameSite: 'none'`. Se for igual, pode usar `sameSite: 'lax'`
+
+### Erros
+1. Crie uma `classe`
+
+```ts
+export class AppError extends Error {
+	constructor(public statusCode: number, message: string) {
+		super(message);
+		this.statusCode = statusCode;
+	}
+}
+
+export default AppError;
+```
+2. Criar o middleware de erro no `index.js`
+   
+> [!WARNING]
+> Criar depois de tudo e antes do `listen`
+
+```ts
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+	if (error instanceof AppError) {
+		res.status(error.statusCode).json({ message: error.message });
+	} else if (error instanceof z.ZodError) { // aqui se se for usar com "zod"
+		res.status(400).json({ message: `${error.issues[0].path}: ${error.issues[0].message}` });
+	} else {
+		console.error(error);
+		res.status(500).json({ message: 'Erro interno de servidor' });
+	}
+});
+```
+3. Incluar o `next: NextFunction` no `controller`
+
+4. Use a classe para chamar algum erro
+
+```ts
+if (value > 2) throw new ApiError(400, 'Valor é maior que 2');
+```
+
+5. No `catch` use o apenas o
+
+```ts
+} catch (error) {
+next(error)
+}
+```
+
 
 ## Configurações
 
