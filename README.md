@@ -2,7 +2,7 @@
 
 #### 🧩 Geral
 
-[🧪Api](#-api) - [🐳Docker](#-docker) - [🔑DotEnv](#-dotenv) - [📤Multer](#-multer) - [✏️Validate](#️-normalize--validação) - [🟨NodeTS](#-nodets) - [⚛️UseRouter](#️-userouter) - [🌐WebSocket](#-websocket)
+[🧪Api](#-api) - [🐳Docker](#-docker) - [🔑DotEnv](#-dotenv) - [📤Multer](#-multer) - [✏️Validate](#️-normalize--validação) - [🟨NodeTS](#-nodets) - [⚛️UseRouter](#️-userouter) - [🌐WebSocket](#-websocket) - [🔞Zod](#-zod)
 
 #### 🔐 Security
 
@@ -696,6 +696,85 @@ useEffect(() => {
 ```tsx
 socket.current.send(JSON.stringify(OBJECT));
 ```
+
+### 🔞 Zod
+
+#### Backend
+
+1. Instalação
+
+```bash
+npm i zod
+```
+
+2. Importação
+
+> `z.config...` é para configurar o idioma da resposta padrão de erro
+
+```ts
+import z from 'zod';
+z.config(z.locales.pt());
+```
+3. Criar `Schema`
+
+```ts
+const loginSchema = z.object({
+	login: z.string().trim().min(3).max(15),
+	password: z.string().trim().min(3).max(20)
+});
+
+const { login, password } = loginSchema.parse(req.body);
+```
+
+> [!NOTE]
+> O erro de uma validação cai direto no `catch` e é pego pelo [Middleware de Erro](#-erros)
+
+#### Frontend
+
+1. Instalação
+   
+```bash
+npm install zod @hookform/resolvers react-hook-form
+```
+2. Criar `Schema`
+   
+3. Exportar a `typagem` do `formulário` para uso do `submit`
+
+```ts
+export type loginFormData = z.infer<typeof loginSchema>;
+```
+4. Importar `Schemas` no componente
+```tsx
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginFormData, loginSchema } from '@/schemas/schemas';
+```
+6. Configurar a chamada do `react-hook-form` no `componente`
+
+```tsx
+const {
+	register,
+	handleSubmit,
+	formState: { errors },
+} = useForm({
+	resolver: zodResolver(loginSchema),
+});
+
+```
+7. Modo de uso
+```tsx
+const handleLogin = (data: loginFormData) => {
+	login(data);
+}
+
+return (
+	<form onSubimit={handleSubmit(handleLogin}>
+		<Input id='login' {...register('login')} />
+		<Input id='password' type='password' {...register('password')} />
+	</form>
+)
+```
+
 
 ## Seguraça
 
