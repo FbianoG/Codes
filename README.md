@@ -721,7 +721,8 @@ z.config(z.locales.pt());
 const loginSchema = z.object({
 	login: z.string().trim().min(3).max(15),
 	password: z.string().trim().min(3).max(20)
-});
+}).refine((data) => data.login !== '123', { message: 'O login não pode ser "123"', path: ['login'] })
+;
 
 const { login, password } = loginSchema.parse(req.body);
 ```
