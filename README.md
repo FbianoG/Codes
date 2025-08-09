@@ -6,7 +6,7 @@
 
 #### 🔐 Security
 
-[🔑Bcrypt](#-bcrypt) - [🌍Cors](#-cors) - [🍪Cookies](#-cookies) - [🚫Error](#-erros)
+[🔑Bcrypt](#-bcrypt) - [🌍Cors](#-cors) - [🍪Cookies](#-cookies) - [🔏Encrypt](#-encrypt) - [🚫Error](#-erros)
 
 #### ⚙️ Configurações
 
@@ -888,6 +888,46 @@ res.cookie('token', token, {
 ```
 
 > Se o domínio do backend for diferente do frontend, use `sameSite: 'none'`. Se for igual, pode usar `sameSite: 'lax'`
+
+### 🔏 Encrypt
+> [!NOTE]
+> Não precisa instalar nada. Já é nativo do Node.js
+
+1. Modo de uso
+
+```ts
+import crypto from 'crypto';
+import 'dotenv/config';
+
+const createKey = crypto.randomBytes(32); // aqui é para criar a key. Deve ser criada uma única vez e ser salva. (se perder, nao consegue reverter a criptografia)
+
+const key = Buffer.from(process.env.CRYPTO_KEY!, 'hex');
+
+export const encrypt = (text: string) => {
+	const iv = crypto.randomBytes(12); // nonce único por criptografia
+	const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+
+	const encrypted = Buffer.concat([cipher.update(text, 'utf8'), cipher.final()]);
+	const tag = cipher.getAuthTag();
+
+	return {
+		iv: iv.toString('hex'),
+		tag: tag.toString('hex'),
+		content: encrypted.toString('hex'),
+	};
+};
+
+export const decrypt = (encrypted: { iv: string; tag: string; content: string }) => {
+	const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(encrypted.iv, 'hex'));
+
+	decipher.setAuthTag(Buffer.from(encrypted.tag, 'hex'));
+
+	const decrypted = Buffer.concat([decipher.update(Buffer.from(encrypted.content, 'hex')), decipher.final()]);
+
+	return decrypted.toString('utf8');
+};
+
+```
 
 ### 🚫 Erros
 1. Crie uma `classe`
