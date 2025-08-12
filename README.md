@@ -6,7 +6,7 @@
 
 #### 🔐 Security
 
-[🔑Bcrypt](#-bcrypt) - [🌍Cors](#-cors) - [🍪Cookies](#-cookies) - [🔏Encrypt](#-encrypt) - [🚫Error](#-erros)
+[🔑Bcrypt](#-bcrypt) - [🌍Cors](#-cors) - [🍪Cookies](#-cookies) - [🔏Encrypt](#-encrypt) - [🚫Error](#-erros) - [🕐RateLimit](#-rate-limit)
 
 #### ⚙️ Configurações
 
@@ -973,6 +973,36 @@ if (value > 2) throw new ApiError(400, 'Valor é maior que 2');
 } catch (error) {
 next(error)
 }
+```
+
+### 🕐 Rate Limit
+
+1. Instalação
+```bash
+npm i express-rate-limit
+```
+
+2. Crie um `middleware` e copie o código abaixo
+```ts
+import rateLimit from 'express-rate-limit';
+
+const rateLimiter = rateLimit({
+  windowMs: 3 * 60 * 1000, // 3 minutos
+  max: 5, // máx. 5 tentativas por IP
+  handler: (req, res) => {
+    return res.status(429).json({
+      success: false,
+      message: 'Muitas tentativas de acesso. Tente novamente em alguns minutos.',
+    });
+  },
+});
+
+export default rateLimiter;
+```
+
+3. Use na `route` que queira aplicar
+```ts
+router.post('/login', rateLimiter, controller)
 ```
 
 
