@@ -746,6 +746,7 @@ export type loginFormData = z.infer<typeof loginSchema>;
 ```
 4. Importar `Schemas` no componente
 ```tsx
+import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginFormData, loginSchema } from '@/schemas/schemas';
