@@ -99,8 +99,26 @@ const { login } = userService;
 > O projeto precisa ter o dockerfile para criar imagem
 
 ```bash
-docker build -t NAME_IMAGEM
+docker build -t NAME_IMAGEM .
 ```
+
+> Caso queira exportar a `imagem` para um servidor (aws, azure...)
+
+1.2. Criar um arquivo físico da imagem
+```bash
+docker save NAME_IMAGEM -o NAME_DO_ARQUIVO.tar
+```
+1.2. Enviar a imagem para o `servidor aws*`
+```bash
+scp -i keys_teste1.pem NAME_ARQUIVO ubuntu@SERVER_PUBLIC_IP:/home/ubuntu/
+```
+> A `key` é usada pela AWS para acesso via SSH
+
+1.3 No `servidor aws*`, carregar a imagem no docker
+```bash
+docker load -i /home/usuario/clcode-image.tar
+```
+
 
 2. Criar network
 
