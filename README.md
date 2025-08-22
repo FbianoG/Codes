@@ -10,7 +10,7 @@
 
 #### ⚙️ Configurações
 
-[✏️Commits](#️-commits) - [🎨Prettier](#-prettier) - [⚙️Vscode Config](#️-vscode-config)
+[✏️Commits](#️-commits) - [🎨Prettier](#-prettier) - [⚙️Vscode Config](#️-vscode-config) - [📟Logs](#-Logs)
 
 ## Códigos
 
@@ -1153,3 +1153,18 @@ npm i -D prettier prettier-plugin-tailwindcss
 	// "editor.fontLigatures": true // Liga as ligaturas
 }
 ```
+
+### 📟 Logs
+
+Aparecer bara de loading no log do cmd
+```bash
+process.stdout.write(`Processando: ${index + 1}/${find.length}\r`);
+
+const progress = Math.floor(((index + 1) / find.length) * 50);
+process.stdout.write(`.[${'='.repeat(progress)}${'.'.repeat(50 - progress)}] ${index + 1}/${find.length}\r`);
+```
+
+
+
+
+
