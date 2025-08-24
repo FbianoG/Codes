@@ -493,6 +493,8 @@ const res = await mongoose.connect('mongodb+srv://teste:<teste1>@cluster0.s1parr
 
 ### ⚛️ UseRouter
 
+#### Next.js
+
 1. Importação
 
 ```tsx
@@ -521,6 +523,36 @@ const id = searchParams.get('id'); // ex: ?id=123
 // Obeter params - Só funciona no '/pasta/[pasta]
 const params = useParams();
 const patientId = params.patientId; // já vem como string
+```
+
+#### React.js
+
+1. Importação
+
+```tsx
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+```
+
+2. Uso
+
+> useParams() é usado apenas no App Router (app/), não no (pages/).
+
+```tsx
+// Redirecionamento
+const navigate = useNavigate();
+navigate('/home')
+
+// Obter pathname atual
+const location = useLocation();
+console.log(location.pathname)
+
+// Obter query params
+const location = useLocation();
+console.log(location.search)
+
+// Obeter params 
+const params = useParams();
+console.log(params.id)
 ```
 
 ### 🌐 WebSocket
