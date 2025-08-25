@@ -10,7 +10,7 @@
 
 #### ⚙️ Configurações
 
-[✏️Commits](#️-commits) - [🎨Prettier](#-prettier) - [⚙️Vscode Config](#️-vscode-config) - [📟Logs](#-Logs)
+[✏️Commits](#️-commits) - [🎨Prettier](#-prettier) - [⚙️Vscode Config](#️-vscode-config) - [📟Logs](#-logs) - [🔼Prisma](#🔼-prisma) - [⚛️Vite](#-vite)
 
 ## Códigos
 
@@ -90,6 +90,8 @@ const { login } = userService;
 }
 ```
 
+---
+
 ### 🐳 Docker
 
 #### Intalação e uso
@@ -105,20 +107,24 @@ docker build -t NAME_IMAGEM .
 > Caso queira exportar a `imagem` para um servidor (aws, azure...)
 
 1.2. Criar um arquivo físico da imagem
+
 ```bash
 docker save NAME_IMAGEM -o NAME_DO_ARQUIVO.tar
 ```
+
 1.2. Enviar a imagem para o `servidor aws*`
+
 ```bash
 scp -i keys_teste1.pem NAME_ARQUIVO ubuntu@SERVER_PUBLIC_IP:/home/ubuntu/
 ```
+
 > A `key` é usada pela AWS para acesso via SSH
 
 1.3 No `servidor aws*`, carregar a imagem no docker
+
 ```bash
 docker load -i /home/usuario/clcode-image.tar
 ```
-
 
 2. Criar network
 
@@ -253,6 +259,8 @@ docker network inspect <nome_network>
 docker network rm <nome_network>
 ```
 
+---
+
 ### 🔑 DotEnv
 
 1. Instalação
@@ -275,6 +283,8 @@ USERNAME_DATABASE="Fabiano123"
 ```env
 NEXT_PUBLIC_DATABASE="Fabiano123"
 ```
+
+---
 
 ### 📤 Multer
 
@@ -365,6 +375,8 @@ const createDocument = async (data: { message: string; to: string; myFile: FileL
 };
 ```
 
+---
+
 ### ✏️ Normalize & Validação
 
 Aqui se retira os acentos, til, ç, espaços e caracteres especiais.
@@ -422,6 +434,8 @@ if (email && typeof email === 'string') {
 }
 ```
 
+---
+
 ### 🟨 NodeTS
 
 1. Iniciar projeto
@@ -473,15 +487,19 @@ npm i typescript ts-node @types/node @types/express nodemon dotenv -D
 
 ```json
 {
-   "version": 2,
-   "builds": [{
-      "src": "src/index.ts",
-      "use": "@vercel/node"
-   }],
-   "routes": [{
-      "src": "/(.*)",
-      "dest": "src/index.ts"
-   }]
+	"version": 2,
+	"builds": [
+		{
+			"src": "src/index.ts",
+			"use": "@vercel/node"
+		}
+	],
+	"routes": [
+		{
+			"src": "/(.*)",
+			"dest": "src/index.ts"
+		}
+	]
 }
 ```
 
@@ -490,6 +508,8 @@ npm i typescript ts-node @types/node @types/express nodemon dotenv -D
 ```ts
 const res = await mongoose.connect('mongodb+srv://teste:<teste1>@cluster0.s1parrs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
 ```
+
+---
 
 ### ⚛️ UseRouter
 
@@ -535,25 +555,27 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 2. Uso
 
-> useParams() é usado apenas no App Router (app/), não no (pages/).
-
 ```tsx
 // Redirecionamento
 const navigate = useNavigate();
-navigate('/home')
+navigate('/home');
 
 // Obter pathname atual
 const location = useLocation();
-console.log(location.pathname)
+console.log(location.pathname);
 
 // Obter query params
 const location = useLocation();
-console.log(location.search)
+console.log(location.search);
 
-// Obeter params 
+// Obeter params
 const params = useParams();
-console.log(params.id)
+console.log(params.id);
 ```
+
+---
+
+---
 
 ### 🌐 WebSocket
 
@@ -612,7 +634,6 @@ const initWss = async (server: Server) => {
 		ws.on('error', (error) => {});
 	});
 };
-
 ```
 
 4. on('message')
@@ -625,7 +646,7 @@ Onde escuta todas as informações trocadas
 
 > Pode enviar qualquer informação, preferencialmente `JSON`
 
--   Validar entrada de dados:
+- Validar entrada de dados:
 
 ```ts
 let data;
@@ -648,19 +669,19 @@ try {
 }
 ```
 
--   Enviar para o remetente
+- Enviar para o remetente
 
 ```ts
 ws.send(JSON.stringify(OBJECT_DATA));
 ```
 
--   Fechar Conexão
+- Fechar Conexão
 
 ```ts
 ws.close(CODIGO_ERRO, JSON.stringify(OBJECT_DATA));
 ```
 
--   Criar uma sessão individual do usuário:
+- Criar uma sessão individual do usuário:
 
 > Tem que ficar dentro do `on('message')`, é onde toda informação é trocada
 
@@ -676,25 +697,25 @@ if (data.type === 'authenticate') {
 }
 ```
 
--   Localizar Cliente:
+- Localizar Cliente:
 
 ```ts
 clients.get(IDENTIFICADOR);
 ```
 
--   Enviar mensagem para um Cliente:
+- Enviar mensagem para um Cliente:
 
 ```ts
 clients.get(IDENTIFICADOR).send(OBJECT_JSON);
 ```
 
--   Deletar Cliente:
+- Deletar Cliente:
 
 ```ts
 clients.delete(IDENTIFICADOR);
 ```
 
--   Fazer algo com todos os Clientes:
+- Fazer algo com todos os Clientes:
 
 ```ts
 clients.forEach((client) => {
@@ -703,6 +724,7 @@ clients.forEach((client) => {
 	}
 });
 ```
+
 #### Frontend
 
 > Não precisa instalar nada no `frontend`. O navegador ja possui `WebSocket` por padrão
@@ -717,26 +739,27 @@ const socket = useRef<WebSocket | null>(null);
 
 > [!NOTE]
 > Use `ws` se estiver rodando localmente e `wss` se estiver em produção
-> 
+
 ```tsx
 useEffect(() => {
 	socket.current = new WebSocket('ws://localhost:3000');
 
 	// Aqui trata sempre que o cliente se conectar
-	socket.current.onopen = () => { };
+	socket.current.onopen = () => {};
 
 	// Aqui trata sempre que o cliente recebe uma informação
-	socket.current.onmessage = (event) => {	};
+	socket.current.onmessage = (event) => {};
 
 	// Aqui trata sempre que o cliente recebe um erro
-	socket.current.onerror = (err) => { };
+	socket.current.onerror = (err) => {};
 
 	// Aqui trata sempre que o cliente fechar a conexão
-	socket.current.onclose = () => { };
+	socket.current.onclose = () => {};
 
-	return () => { socket.current?.close() }
-},[])
-
+	return () => {
+		socket.current?.close();
+	};
+}, []);
 ```
 
 3. Enviar mensagem
@@ -746,6 +769,8 @@ useEffect(() => {
 ```tsx
 socket.current.send(JSON.stringify(OBJECT));
 ```
+
+---
 
 ### 🔞 Zod
 
@@ -759,20 +784,21 @@ npm i zod
 
 2. Importação
 
-> `z.config...` é para configurar o idioma da resposta padrão de erro
-
 ```ts
 import z from 'zod';
-z.config(z.locales.pt());
+
+z.config(z.locales.pt()); // é para configurar o idioma da resposta padrão de erro
 ```
+
 3. Criar `Schema`
 
 ```ts
-const loginSchema = z.object({
-	login: z.string().trim().min(3).max(15),
-	password: z.string().trim().min(3).max(20)
-}).refine((data) => data.login !== '123', { message: 'O login não pode ser "123"', path: ['login'] })
-;
+const loginSchema = z
+	.object({
+		login: z.string().trim().min(3).max(15),
+		password: z.string().trim().min(3).max(20),
+	})
+	.refine((data) => data.login !== '123', { message: 'O login não pode ser "123"', path: ['login'] });
 
 const { login, password } = loginSchema.parse(req.body);
 ```
@@ -783,24 +809,27 @@ const { login, password } = loginSchema.parse(req.body);
 #### Frontend
 
 1. Instalação
-   
+
 ```bash
 npm install zod @hookform/resolvers react-hook-form
 ```
+
 2. Criar `Schema`
-   
 3. Exportar a `typagem` do `formulário` para uso do `submit`
 
 ```ts
 export type loginFormData = z.infer<typeof loginSchema>;
 ```
+
 4. Importar `Schemas` no componente
+
 ```tsx
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginFormData, loginSchema } from '@/schemas/schemas';
 ```
+
 6. Configurar a chamada do `react-hook-form` no `componente`
 
 ```tsx
@@ -811,9 +840,10 @@ const {
 } = useForm({
 	resolver: zodResolver(loginSchema),
 });
-
 ```
+
 7. Modo de uso
+
 ```tsx
 const handleLogin = (data: loginFormData) => {
 	login(data);
@@ -827,6 +857,7 @@ return (
 )
 ```
 
+---
 
 ## Seguraça
 
@@ -869,6 +900,8 @@ export const comparePassword = async (plainPassword, hashedPassword) => {
 };
 ```
 
+---
+
 ### 🌍 Cors
 
 1. Instalação
@@ -895,6 +928,8 @@ const corsOptions = {
 // Configura o CORS com as opções definidas
 app.use(cors(corsOptions));
 ```
+
+---
 
 ### 🍪 Cookies
 
@@ -940,7 +975,10 @@ res.cookie('token', token, {
 
 > Se o domínio do backend for diferente do frontend, use `sameSite: 'none'`. Se for igual, pode usar `sameSite: 'lax'`
 
+---
+
 ### 🔏 Encrypt
+
 > [!NOTE]
 > Não precisa instalar nada. Já é nativo do Node.js
 
@@ -952,7 +990,7 @@ import 'dotenv/config';
 
 const createKey = crypto.randomBytes(32); // aqui é para criar a key. Deve ser criada uma única vez e ser salva. (se perder, nao consegue reverter a criptografia)
 
-const key = Buffer.from(process.env.CRYPTO_KEY!, 'hex');
+const key = Buffer.from(process.env.CRYPTO_KEY!, 'base64');
 
 export const encrypt = (text: string) => {
 	const iv = crypto.randomBytes(12); // nonce único por criptografia
@@ -962,47 +1000,52 @@ export const encrypt = (text: string) => {
 	const tag = cipher.getAuthTag();
 
 	return {
-		iv: iv.toString('hex'),
-		tag: tag.toString('hex'),
-		content: encrypted.toString('hex'),
+		iv: iv.toString('base64'),
+		tag: tag.toString('base64'),
+		content: encrypted.toString('base64'),
 	};
 };
 
 export const decrypt = (encrypted: { iv: string; tag: string; content: string }) => {
-	const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(encrypted.iv, 'hex'));
+	const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(encrypted.iv, 'base64'));
 
-	decipher.setAuthTag(Buffer.from(encrypted.tag, 'hex'));
+	decipher.setAuthTag(Buffer.from(encrypted.tag, 'base64'));
 
-	const decrypted = Buffer.concat([decipher.update(Buffer.from(encrypted.content, 'hex')), decipher.final()]);
+	const decrypted = Buffer.concat([decipher.update(Buffer.from(encrypted.content, 'base64')), decipher.final()]);
 
 	return decrypted.toString('utf8');
 };
-
 ```
 
+---
+
 ### 🚫 Erros
+
 1. Crie uma `classe`
 
 ```ts
-export class AppError extends Error {
-	constructor(public statusCode: number, message: string) {
+export class ErroApi extends Error {
+	constructor(
+		public statusCode: number,
+		message: string,
+	) {
 		super(message);
 		this.statusCode = statusCode;
 	}
 }
 
-export default AppError;
+export default ErroApi;
 ```
+
 2. Criar o middleware de erro no `index.js`
-   
-> [!WARNING]
-> Criar depois de tudo e antes do `listen`
 
 ```ts
+// ! Criar depois de tudo e antes do `listen`
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-	if (error instanceof AppError) {
+	if (error instanceof ErroApi) {
 		res.status(error.statusCode).json({ message: error.message });
-	} else if (error instanceof z.ZodError) { // aqui se se for usar com "zod"
+	} else if (error instanceof z.ZodError) {
+		// aqui se se for usar com "zod"
 		res.status(400).json({ message: `${error.issues[0].path}: ${error.issues[0].message}` });
 	} else {
 		console.error(error);
@@ -1010,9 +1053,10 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 	}
 });
 ```
-3. Incluar o `next: NextFunction` no `controller`
 
-4. Use a classe para chamar algum erro
+3. Incluir o `(next: NextFunction)` no `controller`
+
+4. Usar a `classe` para chamar algum erro dentro do `try`
 
 ```ts
 if (value > 2) throw new ApiError(400, 'Valor é maior que 2');
@@ -1021,41 +1065,47 @@ if (value > 2) throw new ApiError(400, 'Valor é maior que 2');
 5. No `catch` use o apenas o
 
 ```ts
-} catch (error) {
-next(error)
+catch (error) {
+   next(error)
 }
 ```
+
+---
 
 ### 🕐 Rate Limit
 
 1. Instalação
+
 ```bash
 npm i express-rate-limit
 ```
 
-2. Crie um `middleware` e copie o código abaixo
+2. Crie um `middleware`
+
 ```ts
 import rateLimit from 'express-rate-limit';
 
 const rateLimiter = rateLimit({
-  windowMs: 3 * 60 * 1000, // 3 minutos
-  max: 5, // máx. 5 tentativas por IP
-  handler: (req, res) => {
-    return res.status(429).json({
-      success: false,
-      message: 'Muitas tentativas de acesso. Tente novamente em alguns minutos.',
-    });
-  },
+	windowMs: 3 * 60 * 1000, // 3 minutos
+	max: 5, // máx. 5 tentativas por IP
+	handler: (req, res) => {
+		return res.status(429).json({
+			success: false,
+			message: 'Muitas tentativas de acesso. Tente novamente em alguns minutos.',
+		});
+	},
 });
 
 export default rateLimiter;
 ```
 
 3. Use na `route` que queira aplicar
+
 ```ts
-router.post('/login', rateLimiter, controller)
+router.post('/login', rateLimiter, controller);
 ```
 
+---
 
 ## Configurações
 
@@ -1083,6 +1133,8 @@ perf: (performance) - para melhorias de performance.
 chore: (chore) - outras mudanças que não afetam o código fonte ou testes (ex: atualização de dependências menores).
 ```
 
+---
+
 ### 🎨 Prettier
 
 1. Instalação
@@ -1108,6 +1160,8 @@ npm i -D prettier prettier-plugin-tailwindcss
 	"plugins": ["prettier-plugin-tailwindcss"]
 }
 ```
+
+---
 
 ### ⚙️ Vscode Config
 
@@ -1204,9 +1258,12 @@ npm i -D prettier prettier-plugin-tailwindcss
 }
 ```
 
+---
+
 ### 📟 Logs
 
 Aparecer bara de loading no log do cmd
+
 ```bash
 process.stdout.write(`Processando: ${index + 1}/${find.length}\r`);
 
@@ -1214,7 +1271,94 @@ const progress = Math.floor(((index + 1) / find.length) * 50);
 process.stdout.write(`.[${'='.repeat(progress)}${'.'.repeat(50 - progress)}] ${index + 1}/${find.length}\r`);
 ```
 
+---
 
+### 🔼 Prisma
 
+1. Instalação
+```bash
+npm install prisma --save-dev
+npm install @prisma/client
+```
+2. Iniciar o prisma
+```bash
+npx prisma init
+```
+3. No `root`, criar a pasta `prisma` com o arquivo `schema.prisma`
 
+4. Configurar conforme [Prisma Models](https://www.prisma.io/docs/orm/prisma-schema/data-model/models)
 
+5. Criar `src/libs/prisma.ts`
+
+```ts
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+export default prisma;
+```
+6. Usar o `migrate` ou `generate`
+> `migrate` sincroniza o DB com o schema
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
+  
+---
+
+### ⚛️ Vite
+
+#### Configurar portas
+
+1. Incluir o código dentro do `defineConfig` em `vite.config.ts`
+
+```bash
+preview: {
+   port: 3000,
+},
+server: {
+	port: 3000,
+},
+```
+
+#### Usar rotas
+
+1. Instalar
+
+```bash
+npm i react-router-dom
+```
+
+2. No arquivo `main.tsx`
+
+```tsx
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+<StrictMode>
+   <BrowserRouter>
+      <Routes>
+         <Route path='/' element={<Login />} />
+         <Route path='/user' element={<User />} />
+      </Routes>
+   </BrowserRouter>
+</StrictMode>,
+```
+
+> Se usar algum layout específico para páginas privadas
+
+```tsx
+<Route path='/' element={<Login />} />
+<Route element={<PrivateProvider />}>
+	<Route path='/user' element={<User />} />
+	<Route path='/settings' element={<Settings />} />
+</Route>
+```
+
+#### Hospedar na Vercel
+
+1. Criar o arquivo `vercel.json`
+
+```json
+{
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
+```
