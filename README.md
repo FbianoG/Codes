@@ -10,7 +10,7 @@
 
 #### ⚙️ Configurações
 
-[✏️Commits](#️-commits) - [🎨Prettier](#-prettier) - [⚙️Vscode Config](#️-vscode-config) - [📟Logs](#-logs) - [🔼Prisma](#🔼-prisma) - [⚛️Vite](#-vite)
+[✏️Commits](#️-commits) - [🎨Prettier](#-prettier) - [⚙️Vscode Config](#️-vscode-config) - [📟Logs](#-logs) - [🔼Prisma](#-prisma) - [⚛️Vite](#-vite)
 
 ## Códigos
 
