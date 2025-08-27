@@ -96,13 +96,32 @@ const { login } = userService;
 
 #### Intalação e uso
 
+
+> [!NOTE]
+>  O projeto precisa ter o dockerfile para criar imagem
+
+```bash
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY . .
+
+RUN rm -rf node_modules
+RUN npm i
+RUN npx prisma generate
+RUN npm run build
+
+EXPOSE 4040
+
+CMD ["npm", "start"]
+```
+
 1. Criar imagem
-
-> O projeto precisa ter o dockerfile para criar imagem
-
 ```bash
 docker build -t NAME_IMAGEM .
 ```
+
 
 > Caso queira exportar a `imagem` para um servidor (aws, azure...)
 
@@ -139,6 +158,7 @@ docker network create --driver bridge NAME_NETWORK
 ```bash
 docker run -d --name NAME_CONTAINER --network NAME_NETWORK -e VARIABLE=TEXT -p PORT:PORT NAME_IMAGEM
 ```
+
 
 #### Docker - Postgres
 
