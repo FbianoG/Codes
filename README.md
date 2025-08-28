@@ -1399,3 +1399,20 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 	"rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
 ```
+
+### 🎨 CSS
+
+#### Sections
+```css
+@main md:px-8 lg:px-16 xl:px-36 max-w-7xl
+@section py-16 md:py-24
+@title mb-16 max-w-2xl 
+@title:title text-3xl mb-4
+@content gap-8
+```
+
+
+
+
+
+
