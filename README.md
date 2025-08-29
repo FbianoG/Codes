@@ -1025,9 +1025,10 @@ res.cookie('token', token, {
 import crypto from 'crypto';
 import 'dotenv/config';
 
-const createKey = crypto.randomBytes(32); // aqui é para criar a key. Deve ser criada uma única vez e ser salva. (se perder, nao consegue reverter a criptografia)
+const createKey = crypto.randomBytes(32); // aqui é para criar a key. Deve ser criada uma única vez e ser salva depois de converter para string. (se perder, nao consegue reverter a criptografia)
+createKey.toString('hex') // converte a senha em uma string (é bom salvar em 'hex' para uma melhor legibilidade)
 
-const key = Buffer.from(process.env.CRYPTO_KEY!, 'base64');
+const key = Buffer.from(process.env.CRYPTO_KEY!, 'hex'); // lê a key em 'hex' ou 'base64' de acordo com o que foi gerada
 
 export const encrypt = (text: string) => {
 	const iv = crypto.randomBytes(12); // nonce único por criptografia
