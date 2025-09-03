@@ -1,17 +1,17 @@
-# ColaCode
+### Summary
 
 #### 🧩 Geral
 
-[🧪Api](#-api) - [🐳Docker](#-docker) - [🔑DotEnv](#-dotenv) - [📤Multer](#-multer) - [✏️Validate](#️-normalize--validação) - [🟨NodeTS](#-nodets) - [⚛️UseRouter](#️-userouter) - [🌐WebSocket](#-websocket) - [🔞Zod](#-zod)
-
+[🧪Api](#-api) - [[#🐳 Docker]] - [[#🔑 DotEnv]] - [[#📤 Multer]] - [[#✏️ Normalize & Validação]] - [[#🟨 NodeTS]] - [[#🔼 Prisma]] - [[#💻Puppeteer]] - [[#⚛️ UseRouter]] - [[#🌐 WebSocket]] - [[#🔞 Zod]]
 #### 🔐 Security
 
-[🔑Bcrypt](#-bcrypt) - [🌍Cors](#-cors) - [🍪Cookies](#-cookies) - [🔏Encrypt](#-encrypt) - [🚫Error](#-erros) - [🕐RateLimit](#-rate-limit)
+[[#🔑 Bcrypt]] - [[#🌍 Cors]] - [[#🍪 Cookies]] - [[#🔏 Encrypt]] - [[#🚫 Erros]] - [[#🕐 Rate Limit]]
 
 #### ⚙️ Configurações
 
-[✏️Commits](#️-commits) - [🎨Prettier](#-prettier) - [⚙️Vscode Config](#️-vscode-config) - [📟Logs](#-logs) - [🔼Prisma](#-prisma) - [⚛️Vite](#%EF%B8%8F-vite)
+[[#✏️ Commits]] - [[#🎨 CSS]] - [[#🎨 Prettier]] - [[#⚙️ Vscode Config]] - [[#📟 Logs]] - [[#⚛️ Vite]]
 
+---
 ## Códigos
 
 ### 🧪 Api
@@ -19,13 +19,11 @@
 Chamada de API pelo Frontend
 
 1. Instalação
-
 ```bash
 npm i axios
 ```
 
 2. Crie uma pasta <b>api</b> e um arquivo dentro chamado <b>services.ts</b> e cole o código abaixo.
-
 ```ts
 import { errorApi } from '@/utils/errorApi';
 import Toast from '@/utils/Toast';
@@ -67,13 +65,11 @@ export const userService = {
 ```
 
 3. Para usar, chame o <b>service</b> no componente.
-
 ```tsx
 const { login } = userService;
 ```
 
 4. Catch de erro (alterar se for usar function)
-
 ```ts
  catch (error: any) {
     if (error.response) {
@@ -95,14 +91,12 @@ const { login } = userService;
 ### 🐳 Docker
 
 #### Intalação e uso
-
-
 > [!NOTE]
 >  O projeto precisa ter o dockerfile para criar imagem
 
 ```bash
-# Vite
-# Stage 1 - Build
+# <----- Vite ----->
+
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
@@ -110,18 +104,15 @@ RUN npm ci
 COPY . .
 RUN npm run build  # gera dist/
 
-# Stage 2 - Production
 FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-
 EXPOSE 80
 
-## Express
+## <----- Express ----->
 FROM node:18-alpine
 
 WORKDIR /app
-
 COPY . .
 
 RUN rm -rf node_modules
@@ -139,32 +130,9 @@ CMD ["npm", "start"]
 docker build -t NAME_IMAGEM .
 ```
 
-
-> Caso queira exportar a `imagem` para um servidor (aws, azure...)
-
-1.2. Criar um arquivo físico da imagem
-
-```bash
-docker save NAME_IMAGEM -o NAME_DO_ARQUIVO.tar
-```
-
-1.2. Enviar a imagem para o `servidor aws*`
-
-```bash
-scp -i keys_teste1.pem NAME_ARQUIVO ubuntu@SERVER_PUBLIC_IP:/home/ubuntu/
-```
-
-> A `key` é usada pela AWS para acesso via SSH
-
-1.3 No `servidor aws*`, carregar a imagem no docker
-
-```bash
-docker load -i /home/usuario/clcode-image.tar
-```
-
 2. Criar network
 
-> Caso queria linkar com outros conteiners na mesma network
+ - Caso queria linkar com outros conteiner na mesma network
 
 ```bash
 docker network create --driver bridge NAME_NETWORK
@@ -174,6 +142,31 @@ docker network create --driver bridge NAME_NETWORK
 
 ```bash
 docker run -d --name NAME_CONTAINER --network NAME_NETWORK -e VARIABLE=TEXT -p PORT:PORT NAME_IMAGEM
+```
+
+#### Usar AWS
+> [!info]
+> Caso queira exportar a `imagem` para um servidor (aws, azure...)
+
+-  Criar um arquivo físico da imagem
+```bash
+docker save NAME_IMAGEM -o NAME_DO_ARQUIVO.tar
+```
+
+- Enviar a imagem para o `servidor aws*`
+
+>[!important]  
+>A `key_teste1` é fornecido pela AWS ao criar a instância, serve para acesso via SSH
+
+```bash
+scp -i keys_teste1.pem NAME_ARQUIVO ubuntu@SERVER_PUBLIC_IP:/home/ubuntu/
+```
+
+
+- No `servidor aws*`, fazer o load da imagem no docker
+
+```bash
+docker load -i /home/usuario/clcode-image.tar
 ```
 
 
@@ -189,12 +182,14 @@ docker run -d --name NOME_CONTAINER \
 -e POSTGRES_PASSWORD=SENHA_DB \
 -e TZ=America/Sao_Paulo \
 -p 5432:5432 \
--v C:/pgdata:/var/lib/postgresql/data \
+-v pgdata:/var/lib/postgresql/data \
 --restart unless-stopped \
 postgres
 ```
 
-> [-v] é onde o volume do banco de dados será armazenado. Caso queira persistir os dados, precisa ter.
+
+> [!note]
+> `[-v]` é onde o volume do banco de dados será armazenado. Caso queira persistir os dados, precisa ter.
 
 2. Conectar ao backend
 
@@ -243,8 +238,8 @@ sudo rm -rf ~/Área de Trabalho/pgdata
 
 5. Importar e Exportar
 
-> [!WARNING]
-> Ao exportar, use o CMD para evitar erro de utf8
+> [!important]
+> Ao exportar, use o `CMD` para evitar erro de utf8
 > Será exportado para a pasta ativa no terminal
 
 ```bash
@@ -315,10 +310,15 @@ npm i dotenv
 USERNAME_DATABASE="Fabiano123"
 ```
 
-> Não é preciso importar o `dotenv` no `Next.js`, só use
+> [!note]
+> Não é preciso importar o `dotenv` no `next.js` ou `vite`, só use
 
 ```env
+// next.js
 NEXT_PUBLIC_DATABASE="Fabiano123"
+
+// vite
+VITE_PUBLIC_DATABASE="Fabiano123"
 ```
 
 ---
@@ -395,8 +395,9 @@ fs.writeFileSync('./text.txt', base64); // salva o base64 em um arquivo
 ```
 
 5. `Frontend` - Exemplo de uso
-    > [!WARNING]
-    > É obrigatório enviar o arquivo como multipart/form-data.
+
+> [!important]
+> É obrigatório enviar o arquivo como `multipart/form-data`
 
 ```ts
 const createDocument = async (data: { message: string; to: string; myFile: FileList | null }) => {
@@ -459,6 +460,7 @@ const textValidator = (text) => {
 	}
 };
 ```
+
 
 Validar `email`
 
@@ -547,7 +549,86 @@ const res = await mongoose.connect('mongodb+srv://teste:<teste1>@cluster0.s1parr
 ```
 
 ---
+### 🔼 Prisma
 
+- Modelo de `query` e `parâmetros` [Prisma Queries](https://www.prisma.io/docs/orm/prisma-client/queries)
+
+1. Instalação
+```bash
+npm install prisma --save-dev
+npm install @prisma/client
+```
+
+2. Iniciar o prisma
+```bash
+npx prisma init
+```
+
+3. No `root`, criar a pasta `prisma` com o arquivo `schema.prisma`
+
+4. Configurar conforme [Prisma Models](https://www.prisma.io/docs/orm/prisma-schema/data-model/models)
+
+5. Criar `src/libs/prisma.ts`
+
+> [!warning]
+> Em alguns casos funciona o  `@prisma/client` e outros não
+
+```ts
+import { PrismaClient } from '@prisma/client'; // mudar import
+
+const prisma = new PrismaClient();
+export default prisma;
+```
+
+6. Usar o `migrate` ou `generate`
+
+> [!note] 
+> `migrate` sincroniza o DB com o schema
+
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
+  
+###  💻Puppeteer
+
+1. Instalação:
+```bash
+npm i pupperteer
+```
+
+2. Modo de uso:
+```ts
+const browser = await puppeteer.launch({
+	headless: false, // false para ver o site
+	userDataDir: './meu-perfil', // pasta onde o cache e cookies serão salvos
+   });
+
+const page = await browser.newPage();
+
+const url = `https://globo.com`;
+
+await page.goto(url, { waitUntil: 'networkidle2' });
+
+await page.setViewport({ width: 1080, height: 1024 });
+
+await page.waitForSelector('#login-usuario'); // esperar elemento carregar
+
+await page.type('#login-usuario', 'teste123'); // digitar no input
+
+await page.click('button[type="submit"]'); // clicar
+
+await page.screenshot({ path: 'screenshot.png' }); // tirar print
+
+// Se o elemento nao tiver algum identificador, pode acessar pela posição
+// const buttons = await page.$$('button[data-slot="button"]');
+// await buttons[1].click(); // índice 1 = segundo botão
+
+await browser.close(); // fecha o navegador
+
+```
+
+---
 ### ⚛️ UseRouter
 
 #### Next.js
@@ -560,6 +641,7 @@ import { useRouter, usePathname, useSearchParams, useParams } from 'next/navigat
 
 2. Uso
 
+> [!note] 
 > useParams() é usado apenas no App Router (app/), não no (pages/).
 
 ```tsx
@@ -612,8 +694,6 @@ console.log(params.id);
 
 ---
 
----
-
 ### 🌐 WebSocket
 
 Ver exemplo em: [ProClinic-Front](https://github.com/FbianoG/ProClinic-Front/blob/main/src/components/chat/Chat.tsx)
@@ -623,11 +703,13 @@ Ver exemplo em: [ProClinic-Back](https://github.com/FbianoG/ProClinic-Back/blob/
 
 1. Instalação
 
+> [!NOTE]
+> Frontend não precisa de instalação
+
 ```bash
 npm i ws
 ```
 
-> Frontend não precisa de instalação
 
 2. Crie um servidor `HTTP` no `index` do projeto
 
@@ -673,11 +755,11 @@ const initWss = async (server: Server) => {
 };
 ```
 
-4. on('message')
+4. `on('message')`
 
 Onde escuta todas as informações trocadas
 
-> `ws` é o computador que está enviando a informação
+>  `ws` é o computador que está enviando a informação
 
 > Só recebe `string` ou `buffer`.
 
@@ -814,13 +896,11 @@ socket.current.send(JSON.stringify(OBJECT));
 #### Backend
 
 1. Instalação
-
 ```bash
 npm i zod
 ```
 
 2. Importação
-
 ```ts
 import z from 'zod';
 
@@ -828,7 +908,6 @@ z.config(z.locales.pt()); // é para configurar o idioma da resposta padrão de 
 ```
 
 3. Criar `Schema`
-
 ```ts
 const loginSchema = z
 	.object({
@@ -949,7 +1028,8 @@ npm i cors
 
 2. Cole o código no <b>index.js</b>.
 
-> app.use(cors) - deve ser usado antes das rotas
+> [!note]
+>  app.use(cors) - deve ser usado antes das rotas
 
 ```ts
 import cors from 'cors';
@@ -1017,7 +1097,7 @@ res.cookie('token', token, {
 ### 🔏 Encrypt
 
 > [!NOTE]
-> Não precisa instalar nada. Já é nativo do Node.js
+> Não precisa instalar nada. Já é nativo do `Node.js`
 
 1. Modo de uso
 
@@ -1172,7 +1252,110 @@ chore: (chore) - outras mudanças que não afetam o código fonte ou testes (ex:
 ```
 
 ---
+### 🎨 CSS
 
+#### Typography (Shadcn)
+
+```css
+h1 {@apply scroll-m-20 text-4xl font-extrabold tracking-tight text-balance;}
+   
+h2 {@apply scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0;}
+   
+h3 {@apply scroll-m-20 text-2xl font-semibold tracking-tight;}
+
+h4 {@apply scroll-m-20 text-xl font-semibold tracking-tight;}
+  
+h5 {@apply scroll-m-20 font-semibold tracking-tight;}
+
+blockquote {@apply text-muted-foreground my-6 border-l-2 pl-6 italic;}
+
+code {@apply relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;}
+
+small {@apply text-muted-foreground block text-sm font-medium;}
+
+a {@apply hover:text-muted-foreground duration-150;}
+```
+
+#### Sections
+```html
+<main className='md:px-8 lg:px-16 xl:px-36 max-w-7xl'>
+	<section className='py-16 md:py-24'>
+		<div className='mb-16 max-w-2xl'>
+			<h2 className='text-3xl mb-4'>Title</h2>
+			<p className='text-muted-foreground'>Sub-title</p>
+		</div>
+		<div className='space-8'>
+			...
+		</div>
+	</section>
+</main>
+
+```
+
+#### Background Pattern
+
+```html
+// Pontinhos --->
+ <div class="absolute inset-0 opacity-5 mask-b-from-0% -z-10" style="background-image: radial-gradient(circle at 25% 25%, red 1px, transparent 1px); background-size: 25px 25px" /> 
+
+ 
+// Ladrilhos ---> 
+<div class="absolute inset-0 opacity-5 mask-b-from-0% -z-10" style="background-image: linear-gradient(to right, red 1px, transparent 1px), linear-gradient(to bottom, red 1px, transparent 1px); background-size: 100px 100px;" /> 
+
+// Linhas Verticais ---> 
+<div class="absolute inset-0 opacity-10 mask-b-from-10% -z-10" style="background-image: linear-gradient(30deg, red 1px, transparent 1px), linear-gradient(150deg, red 1px, transparent 1px), linear-gradient(90deg, red 1px, transparent 1px); background-size: 30px 30px;" /> 
+
+
+// Linhas Horizontais ---> 
+<div class="absolute inset-0 opacity-10 mask-b-from-10% -z-10" style="background-image: linear-gradient(30deg, red 1px, transparent 1px), linear-gradient(150deg, red 1px, transparent 1px), linear-gradient(0deg, red 1px, transparent 1px); background-size: 30px 30px;" />
+```
+
+
+#### Fade-in (animation)
+
+1. Aplicar o `css`
+```css
+.fade-in { 
+	opacity: 0;
+	transform: translateY(30px); 
+	transition: all 0.8s ease; 
+ } 
+ 
+ .fade-in.visible { 
+	 opacity: 1; 
+	 transform: translateY(0); 
+ }
+```
+
+2. Criar o `script`
+```tsx
+   useEffect(() => {
+      const observer = new IntersectionObserver((entries) => {
+         entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+               entry.target.classList.add('visible');
+            }
+         });
+      },{
+            root: null, // é valor padrão (funciona se tirar)
+            threshold: 0.8, // quanto do elemento tem que estar na tela para ficar visível
+         },);
+
+      const elements = document.querySelectorAll('.fade-in');
+      
+      elements.forEach((el) => observer.observe(el));
+      
+      return () => {
+         elements.forEach((el) => observer.unobserve(el));
+      };
+   }, []);
+```
+
+3. Adicionar `classe` no elemento
+```html
+<div className='fade-in'>...</div>
+```
+---
 ### 🎨 Prettier
 
 1. Instalação
@@ -1300,52 +1483,20 @@ npm i -D prettier prettier-plugin-tailwindcss
 
 ### 📟 Logs
 
-Aparecer bara de loading no log do cmd
-
-```bash
-process.stdout.write(`Processando: ${index + 1}/${find.length}\r`);
-
-const progress = Math.floor(((index + 1) / find.length) * 50);
-process.stdout.write(`.[${'='.repeat(progress)}${'.'.repeat(50 - progress)}] ${index + 1}/${find.length}\r`);
-```
-
----
-
-### 🔼 Prisma
-
-1. Instalação
-```bash
-npm install prisma --save-dev
-npm install @prisma/client
-```
-2. Iniciar o prisma
-```bash
-npx prisma init
-```
-3. No `root`, criar a pasta `prisma` com o arquivo `schema.prisma`
-
-4. Configurar conforme [Prisma Models](https://www.prisma.io/docs/orm/prisma-schema/data-model/models)
-
-5. Criar `src/libs/prisma.ts`
+Aparecer barra de loading no log do cmd
 
 ```ts
-import { PrismaClient } from '@prisma/client';
+process.stdout.write(`Processando: ${index + 1}/${arr.length}\r`);
 
-const prisma = new PrismaClient();
-export default prisma;
+const progress = Math.floor(((index + 1) / arr.length) * 50);
+process.stdout.write(`.[${'='.repeat(progress)}${'.'.repeat(50 - progress)}] ${index + 1}/${arr.length}\r`);
 ```
-6. Usar o `migrate` ou `generate`
-> `migrate` sincroniza o DB com o schema
-```bash
-npx prisma generate
-npx prisma migrate dev
-```
-  
+
 ---
 
 ### ⚛️ Vite
 
-#### Configurar portas
+#### Portas
 
 1. Incluir o código dentro do `defineConfig` em `vite.config.ts`
 
@@ -1358,7 +1509,10 @@ server: {
 },
 ```
 
-#### Usar rotas
+#### Rotas
+
+> [!note]
+> > Ver configuração para nevegação entre rotas [[#⚛️ UseRouter#React.js]]
 
 1. Instalar
 
@@ -1380,7 +1534,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 </StrictMode>,
 ```
 
-> Se usar algum layout específico para páginas privadas
+-  Para usar algum layout específico para páginas privadas
 
 ```tsx
 <Route path='/' element={<Login />} />
@@ -1400,20 +1554,4 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 	"rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
 ```
-
-### 🎨 CSS
-
-#### Sections
-```css
-@main md:px-8 lg:px-16 xl:px-36 max-w-7xl
-@section py-16 md:py-24
-@title mb-16 max-w-2xl 
-@title:title text-3xl mb-4
-@content gap-8
-```
-
-
-
-
-
 
